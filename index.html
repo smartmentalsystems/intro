@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Smart Mental System (SMS)</title>
+<style>
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f6f9fb;
+    color: #222;
+    padding: 1rem;
+  }
+
+  header {
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+
+  header h1 {
+    font-size: 2.8rem;
+    color: #52acff;
+    margin-bottom: 0.2rem;
+  }
+
+  header p {
+    font-size: 1.3rem;
+    color: #444;
+  }
+
+  .introduction {
+        padding:15%;
+    margin: 2rem auto;
+    background: white;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+
+  .introduction h2 {
+    color: #52acff;
+    margin-bottom: 1rem;
+    font-size: 2rem;
+  }
+
+  .introduction h3 {
+    color: #333;
+    margin-top: 1.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .introduction p {
+    line-height: 1.6;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  .introduction ul {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+    color: #333;
+  }
+
+  .introduction ul li {
+    margin-bottom: 0.5rem;
+    font-size: 1.05rem;
+  }
+
+  .carousel-wrapper {
+    position: relative;
+    margin: 3rem auto 4rem;
+    overflow: visible; /* allow overflow for overlap */
+  }
+
+  .carousel {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 90%;
+    margin: auto;
+    position: relative;
+    gap: 0;
+  }
+
+  .phone {
+    width: 25%;
+    aspect-ratio: 9 / 18;
+    border: 14px solid #333;
+    border-radius: 30px;
+    overflow: hidden;
+    background: #000;
+    transition: transform 0.5s ease, opacity 0.5s ease, margin-top 0.5s ease, z-index 0.5s ease;
+    opacity: 0.6;
+    margin-top: 5px;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+  }
+
+  .phone img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Center phone bigger and overlap side phones */
+  .phone.active {
+    width: 27%;
+    margin-top: 0;
+    opacity: 1;
+    z-index: 3;
+    transform: scale(1.08);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+  }
+
+  /* Left phone partially behind center phone */
+  .phone:first-child {
+    margin-right: -60px;
+    z-index: 2;
+  }
+
+  /* Right phone partially behind center phone */
+  .phone:last-child {
+    margin-left: -60px;
+    z-index: 2;
+  }
+
+  .nav-buttons {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 10px; /* space from edges */
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.nav-buttons button {
+  pointer-events: auto;
+  background: #52acff;
+  border: none;
+  color: white;
+  font-size: 0.5rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(82, 172, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+.nav-buttons button:hover {
+  background: #3a91dd;
+  transform: scale(1.15);
+}
+
+
+  .download-section {
+    text-align: center;
+    margin: 2rem 0 4rem;
+  }
+
+  .download-btn {
+    background: #52acff;
+    color: white;
+    padding: 1.15rem 2.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.3rem;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(82,172,255,0.7);
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    display: inline-block;
+  }
+
+  .download-btn:hover {
+    background: #3a91dd;
+    box-shadow: 0 8px 20px rgba(58,145,221,0.85);
+  }
+
+  .features {
+    padding:15%;
+    margin: 3rem auto 5rem;
+    padding: 2rem 2.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .features h2 {
+    text-align: center;
+    color: #52acff;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+  }
+
+  .features ul {
+    columns: 2;
+    padding-left: 1.5rem;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  .features li {
+    margin-bottom: 0.7rem;
+  }
+
+  .mission {
+    padding:15%;
+    margin: 3rem auto 6rem;
+    text-align: center;
+    padding: 1.5rem 2rem;
+    font-size: 1.2rem;
+    color: #444;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.1);
+  }
+
+  .mission h2 {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+    color: #52acff;
+  }
+
+  footer.team {
+    text-align: center;
+    margin: 3rem 1rem 4rem;
+    font-size: 1rem;
+    color: #555;
+  }
+
+  footer.team strong {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+
+  /* Contact form styling */
+  .contact-section {
+        padding:15%;
+    margin: 0 auto 6rem;
+    background: white;
+    padding: 2rem 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+  }
+
+  .contact-section h2 {
+    color: #52acff;
+    margin-bottom: 1.3rem;
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  label {
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1rem;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  textarea {
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.3rem;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    resize: vertical;
+    font-family: inherit;
+  }
+
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  textarea:focus {
+    border-color: #52acff;
+    outline: none;
+  }
+
+  textarea {
+    min-height: 120px;
+  }
+
+  button[type="submit"] {
+    background: #52acff;
+    color: white;
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(82,172,255,0.7);
+    transition: background 0.3s ease;
+    align-self: center;
+    width: 50%;
+  }
+
+  button[type="submit"]:hover {
+    background: #3a91dd;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 850px) {
+    .features ul {
+      columns: 1;
+    }
+    .phone {
+      width: 33%;
+    }
+    .phone.active {
+      width: 38%;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .carousel {
+      height: 400px;
+    }
+    .phone {
+      width: 40%;
+      border-width: 10px;
+      border-radius: 24px;
+    }
+    .phone.active {
+      width: 48%;
+    }
+    .nav-buttons button {
+      font-size: 0.8rem;
+      width: 25px;
+      height: 25px;
+    }
+    button[type="submit"] {
+      width: 70%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SMART MENTAL SYSTEM</h1>
+  <p>By Your Side, Every Moment, Every Feeling.</p>
+</header>
+<section class="mission">
+  <h2>Our Mission</h2>
+  <p>
+    To make mental health support accessible and affordable, while fostering a new generation of well-trained professionals. We combine technology, compassion, and community to build a healthier future for all.
+  </p>
+</section>
+<section class="introduction">
+  <h2>About Smart Mental System (SMS)</h2>
+
+  <p>
+    Mental health support should be accessible, affordable, and effective for everyone. That’s why we created <strong>Smart Mental System (SMS)</strong> — a platform designed to provide compassionate mental health assistance while helping students gain practical experience under expert supervision.
+  </p>
+
+  <h3>Why SMS?</h3>
+  <p>
+    Many people struggle to find affordable therapy, and students in mental health fields often lack real-world training opportunities. SMS bridges this gap by connecting experienced psychologists, students, and those seeking support — creating a community focused on well-being and growth.
+  </p>
+
+  <h3>What Makes SMS Unique?</h3>
+  <ul>
+    <li><strong>Affordable Care:</strong> We offer accessible mental health services for individuals facing financial challenges.</li>
+    <li><strong>Student Mentorship:</strong> Psychology students get hands-on experience supervised by professionals.</li>
+    <li><strong>Progress Tracking:</strong> Use mood trackers, psychological tests, and gratitude journals to monitor your emotional health.</li>
+    <li><strong>Smart Scheduling:</strong> Easily book and manage appointments with therapists and supervisors.</li>
+    <li><strong>Community Insights:</strong> Explore an interactive mood map showing emotional trends in different regions.</li>
+    <li><strong>AI Support:</strong> Chat with our intelligent assistant for guidance and encouragement anytime.</li>
+  </ul>
+
+  <h3>Our Goal</h3>
+  <p>
+    SMS is dedicated to empowering individuals on their mental health journey by offering supportive tools and creating meaningful learning experiences — all in one integrated platform.
+  </p>
+</section>
+
+<div class="carousel-wrapper">
+  <div class="carousel" id="carousel">
+    <div class="phone"><img src="screen1.png" alt="Screen 1" onclick="prevSlide()"></div>
+    <div class="phone active"><img src="screen2.png" alt="Screen 2"></div>
+    <div class="phone"><img src="screen3.png" alt="Screen 3"onclick="nextSlide()"></div>
+  </div>
+</div>
+
+<div class="download-section">
+  <a href="https://drive.google.com/drive/folders/1w1Co89rlxffkOWQvrSDEiJC0lmCyP0s6?usp=drive_link" target="_blank" rel="noopener" class="download-btn">
+    Download Now
+</a>
+</div>
+
+<section class="features">
+  <h2>Key Features</h2>
+  <ul>
+    <li>Affordable therapy sessions with professional supervision</li>
+    <li>Hands-on practical experience for mental health students</li>
+    <li>Mood tracker and emotional progress monitoring tools</li>
+    <li>Gratitude journaling to encourage positive habits</li>
+    <li>Easy-to-use appointment scheduling system</li>
+    <li>Interactive mood map showing regional emotional trends</li>
+    <li>AI chatbot offering 24/7 emotional support and guidance</li>
+    <li>Feedback reports for student improvement and patient care</li>
+  </ul>
+</section>
+
+
+
+<section class="contact-section" id="contact">
+  <h2>Contact Us</h2>
+  <form onsubmit="return handleSubmit(event)">
+    <label for="name">Name:</label>
+    <input id="name" name="name" type="text" placeholder="Your full name" required />
+
+    <label for="email">Email:</label>
+    <input id="email" name="email" type="email" placeholder="Your email address" required />
+
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" placeholder="Write your message here..." required></textarea>
+
+    <button type="submit">Send Message</button>
+  </form>
+</section>
+
+  <footer class="team">
+    <strong>Team Credits</strong>
+    Nika Golestani (CSE) – Eylül Akar (CSE) – Jafaria Smirnova (CSE)<br/>
+    Samet Alper Özdemir (CSE) – Ahmet Kaan Arslan (IE) – Kaan Yıldırım (IE)
+  </footer>
+
+<script>
+  const images = ['screen1.png', 'screen2.png', 'screen3.png'];
+const phones = document.querySelectorAll('.phone');
+let no_counter = 1; // starting at second phone in center
+
+function updateSlider() {
+  // Wrap no_counter properly within [0, images.length - 1]
+  no_counter = ((no_counter % images.length) + images.length) % images.length;
+
+  const center = no_counter;
+  const left = (center + images.length - 1) % images.length;
+  const right = (center + 1) % images.length;
+
+  // Update images
+  phones[0].querySelector('img').src = images[left];
+  phones[1].querySelector('img').src = images[center];
+  phones[2].querySelector('img').src = images[right];
+
+  // Update classes
+  phones.forEach((phone, i) => phone.classList.remove('active'));
+  phones[1].classList.add('active');
+}
+
+function nextSlide() {
+  no_counter++;
+  updateSlider();
+}
+
+function prevSlide() {
+  no_counter--;
+  updateSlider();
+}
+
+// Initialize slider at start
+updateSlider();
+
+  // Contact form submission handler (mock)
+  function handleSubmit(event) {
+    event.preventDefault();
+    const name = event.target.name.value.trim();
+    const email = event.target.email.value.trim();
+    const message = event.target.message.value.trim();
+
+    if (!name || !email || !message) {
+      alert('Please fill in all fields.');
+      return false;
+    }
+
+    alert(`Thank you for contacting us, ${name}! We will respond to ${email} shortly.`);
+    event.target.reset();
+    return false;
+  }
+</script>
+
+</body>
+</html>
